@@ -58,7 +58,7 @@ osm install \
 ```bash
 kubectl create namespace curl
 osm namespace add curl
-kubectl apply -n curl -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/egress-gateway/curl.yaml
+kubectl apply -n curl -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/egress-gateway/curl.yaml
 ```
 
 #### 3.2.2 部署全局出口代理网关
@@ -66,10 +66,10 @@ kubectl apply -n curl -f https://raw.githubusercontent.com/cybwan/osm-edge-start
 ```bash
 #忽略可能的重复创建 namespace 错误
 kubectl create namespace egress-gateway
-kubectl apply -n egress-gateway -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/egress-gateway/global-egress-gateway-rbac.yaml
-kubectl apply -n egress-gateway -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/egress-gateway/global-egress-gateway-service.yaml
-kubectl apply -n egress-gateway -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/egress-gateway/global-egress-gateway-configmap.yaml
-kubectl apply -n egress-gateway -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/egress-gateway/global-egress-gateway-deployment.yaml
+kubectl apply -n egress-gateway -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/egress-gateway/global-egress-gateway-rbac.yaml
+kubectl apply -n egress-gateway -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/egress-gateway/global-egress-gateway-service.yaml
+kubectl apply -n egress-gateway -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/egress-gateway/global-egress-gateway-configmap.yaml
+kubectl apply -n egress-gateway -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/egress-gateway/global-egress-gateway-deployment.yaml
 ```
 
 #### 3.2.3 等待依赖的 POD 正常启动

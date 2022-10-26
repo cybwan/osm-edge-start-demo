@@ -60,23 +60,23 @@ kubectl wait --namespace ingress-nginx \
 
 ### 4.1 技术概念
 
-<img src="https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/bidirection-mtls-nginx/Bidirectional_mTLS.png" alt="Bidirectional_mTLS" style="zoom:80%;" />
+<img src="https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/bidirection-mtls-nginx/Bidirectional_mTLS.png" alt="Bidirectional_mTLS" style="zoom:80%;" />
 
 ### 4.2 部署业务 POD
 
 ```bash
 #模拟时间服务
 kubectl create namespace egress-server
-kubectl apply -n egress-server -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/bidirection-mtls-nginx/server.yaml
+kubectl apply -n egress-server -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/bidirection-mtls-nginx/server.yaml
 
 #模拟中间件服务
 kubectl create namespace egress-middle
 osm namespace add egress-middle
-kubectl apply -n egress-middle -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/bidirection-mtls-nginx/middle.yaml
+kubectl apply -n egress-middle -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/bidirection-mtls-nginx/middle.yaml
 
 #模拟外部客户端
 kubectl create namespace egress-client
-kubectl apply -n egress-client -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/bidirection-mtls-nginx/client.yaml
+kubectl apply -n egress-client -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/bidirection-mtls-nginx/client.yaml
 
 #等待依赖的 POD 正常启动
 kubectl wait --for=condition=ready pod -n egress-server -l app=server --timeout=180s

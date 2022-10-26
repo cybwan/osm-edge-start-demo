@@ -71,10 +71,10 @@ kubectl patch meshconfig osm-mesh-config -n "$osm_namespace" -p '{"spec":{"traff
 #Simulate business service
 kubectl create namespace ratelimit
 osm namespace add ratelimit
-kubectl apply -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/rate-limit/fortio.yaml -n ratelimit
+kubectl apply -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/rate-limit/fortio.yaml -n ratelimit
 
 #Simulate client
-kubectl apply -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/rate-limit/fortio-client.yaml -n ratelimit
+kubectl apply -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/rate-limit/fortio-client.yaml -n ratelimit
 
 #Wait for POD to start properly
 kubectl wait --for=condition=ready pod -n ratelimit -l app=fortio --timeout=180s

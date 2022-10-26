@@ -60,23 +60,23 @@ kubectl wait --namespace ingress-nginx \
 
 ### 4.1 Technical Concepts
 
-<img src="https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/bidirection-mtls-nginx/Bidirectional_mTLS.png" alt="Bidirectional_mTLS" style="zoom:80%;" />
+<img src="https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/bidirection-mtls-nginx/Bidirectional_mTLS.png" alt="Bidirectional_mTLS" style="zoom:80%;" />
 
 ### 4.2 Deploy application POD
 
 ```bash
 #Sample server service
 kubectl create namespace egress-server
-kubectl apply -n egress-server -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/bidirection-mtls-nginx/server.yaml
+kubectl apply -n egress-server -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/bidirection-mtls-nginx/server.yaml
 
 #Sample middle-ware service
 kubectl create namespace egress-middle
 osm namespace add egress-middle
-kubectl apply -n egress-middle -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/bidirection-mtls-nginx/middle.yaml
+kubectl apply -n egress-middle -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/bidirection-mtls-nginx/middle.yaml
 
 #Sample client
 kubectl create namespace egress-client
-kubectl apply -n egress-client -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/bidirection-mtls-nginx/client.yaml
+kubectl apply -n egress-client -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/bidirection-mtls-nginx/client.yaml
 
 #Wait for POD to start properly
 kubectl wait --for=condition=ready pod -n egress-server -l app=server --timeout=180s

@@ -53,15 +53,15 @@ osm install \
 #模拟业务服务
 kubectl create namespace httpbin
 osm namespace add httpbin
-kubectl apply -n httpbin -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/retry/httpbin.yaml
+kubectl apply -n httpbin -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/retry/httpbin.yaml
 
 kubectl create namespace httpbin-ext
-kubectl apply -n httpbin-ext -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/retry/httpbin.yaml
+kubectl apply -n httpbin-ext -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/retry/httpbin.yaml
 
 #模拟客户端
 kubectl create namespace retry
 osm namespace add retry
-kubectl apply -n retry -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/retry/curl.yaml
+kubectl apply -n retry -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/retry/curl.yaml
 
 #等待依赖的 POD 正常启动
 kubectl wait --for=condition=ready pod -n httpbin -l app=httpbin --timeout=180s

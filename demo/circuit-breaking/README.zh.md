@@ -65,10 +65,10 @@ kubectl create namespace circuit-breaking
 osm namespace add circuit-breaking
 
 #模拟业务服务
-kubectl apply -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/circuit-breaking/fortio.yaml -n circuit-breaking
+kubectl apply -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/circuit-breaking/fortio.yaml -n circuit-breaking
 
 #模拟客户端
-kubectl apply -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/circuit-breaking/fortio-client.yaml -n circuit-breaking
+kubectl apply -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/circuit-breaking/fortio-client.yaml -n circuit-breaking
 
 #等待依赖的 POD 正常启动
 kubectl wait --for=condition=ready pod -n circuit-breaking -l app=fortio --timeout=180s

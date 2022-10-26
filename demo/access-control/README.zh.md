@@ -53,11 +53,11 @@ osm install \
 #模拟业务服务
 kubectl create namespace httpbin
 osm namespace add httpbin
-kubectl apply -n httpbin -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/access-control/httpbin.yaml
+kubectl apply -n httpbin -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/access-control/httpbin.yaml
 
 #模拟外部客户端
 kubectl create namespace curl
-kubectl apply -n curl -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/access-control/curl.yaml
+kubectl apply -n curl -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/access-control/curl.yaml
 
 #等待依赖的 POD 正常启动
 kubectl wait --for=condition=ready pod -n httpbin -l app=httpbin --timeout=180s
@@ -226,7 +226,7 @@ EOF
 
 ```bash
 #模拟外部客户端
-kubectl apply -n curl -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/access-control/curl-mtls.yaml
+kubectl apply -n curl -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/access-control/curl-mtls.yaml
 
 #等待依赖的 POD 正常启动
 ```
@@ -286,7 +286,7 @@ osm-stats-pod: httpbin-77dcf49495-tshft
 
 ```bash
 export osm_namespace=osm-system
-kubectl apply -n curl -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/access-control/curl.yaml
+kubectl apply -n curl -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/access-control/curl.yaml
 kubectl patch meshconfig osm-mesh-config -n "$osm_namespace" -p '{"spec":{"featureFlags":{"enableAccessControlPolicy":false}}}'  --type=merge
 kubectl patch meshconfig osm-mesh-config -n "$osm_namespace" -p '{"spec":{"featureFlags":{"enableAccessCertPolicy":false}}}'  --type=merge
 kubectl delete accesscontrol -n httpbin httpbin
@@ -325,7 +325,7 @@ EOF
 
 ```bash
 #模拟外部客户端
-kubectl apply -n curl -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/access-control/curl-mtls.yaml
+kubectl apply -n curl -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/access-control/curl-mtls.yaml
 
 #等待依赖的 POD 正常启动
 ```
@@ -385,7 +385,7 @@ osm-stats-pod: httpbin-77dcf49495-tshft
 
 ```bash
 export osm_namespace=osm-system
-kubectl apply -n curl -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/access-control/curl.yaml
+kubectl apply -n curl -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/access-control/curl.yaml
 kubectl patch meshconfig osm-mesh-config -n "$osm_namespace" -p '{"spec":{"featureFlags":{"enableAccessControlPolicy":false}}}'  --type=merge
 kubectl patch meshconfig osm-mesh-config -n "$osm_namespace" -p '{"spec":{"featureFlags":{"enableAccessCertPolicy":false}}}'  --type=merge
 kubectl delete accesscontrol -n httpbin httpbin

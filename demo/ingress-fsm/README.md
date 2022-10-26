@@ -39,11 +39,11 @@ osm install \
 #Simulate business service
 kubectl create namespace httpbin
 osm namespace add httpbin
-kubectl apply -n httpbin -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/ingress-fsm/httpbin.yaml
+kubectl apply -n httpbin -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/ingress-fsm/httpbin.yaml
 
 #Simulate external client
 kubectl create namespace ext-curl
-kubectl apply -n ext-curl -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/egress-gateway/curl.yaml
+kubectl apply -n ext-curl -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/egress-gateway/curl.yaml
 
 #Wait for the dependent POD to start normally
 kubectl wait --for=condition=ready pod -n httpbin -l app=httpbin --timeout=180s

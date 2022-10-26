@@ -51,11 +51,11 @@ To access `osm-edge` service mesh managed services from non mesh, you are provid
 #Simulate business service
 kubectl create namespace httpbin
 osm namespace add httpbin
-kubectl apply -n httpbin -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/access-control/httpbin.yaml
+kubectl apply -n httpbin -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/access-control/httpbin.yaml
 
 #Simulate external client
 kubectl create namespace curl
-kubectl apply -n curl -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/access-control/curl.yaml
+kubectl apply -n curl -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/access-control/curl.yaml
 
 #Wait for the dependent POD to start normally
 kubectl wait --for=condition=ready pod -n httpbin -l app=httpbin --timeout=180s

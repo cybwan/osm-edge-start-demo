@@ -56,13 +56,13 @@ osm install \
 ```bash
 #模拟外部服务
 kubectl create namespace egress-server
-kubectl apply -n egress-server -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/egress/httpbin.yaml
-kubectl apply -n egress-server -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/bidirection-mtls-nginx/server.yaml
+kubectl apply -n egress-server -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/egress/httpbin.yaml
+kubectl apply -n egress-server -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/bidirection-mtls-nginx/server.yaml
 
 #模拟业务服务
 kubectl create namespace egress-client
 osm namespace add egress-client
-kubectl apply -n egress-client -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/bidirection-mtls-nginx/client.yaml
+kubectl apply -n egress-client -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/bidirection-mtls-nginx/client.yaml
 
 #等待依赖的 POD 正常启动
 kubectl wait --for=condition=ready pod -n egress-server -l app=httpbin --timeout=180s

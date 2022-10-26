@@ -33,23 +33,23 @@ osm install \
 
 ### 3.1 技术概念
 
-<img src="https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/bidirection-mtls-access-control/Bidirectional_mTLS.png" alt="Bidirectional_mTLS" style="zoom:80%;" />
+<img src="https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/bidirection-mtls-access-control/Bidirectional_mTLS.png" alt="Bidirectional_mTLS" style="zoom:80%;" />
 
 ### 3.2 部署业务 POD
 
 ```bash
 #模拟时间服务
 kubectl create namespace egress-server
-kubectl apply -n egress-server -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/bidirection-mtls-access-control/server.yaml
+kubectl apply -n egress-server -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/bidirection-mtls-access-control/server.yaml
 
 #模拟中间件服务
 kubectl create namespace bidi-mtls-middle
 osm namespace add bidi-mtls-middle
-kubectl apply -n bidi-mtls-middle -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/bidirection-mtls-access-control/middle.yaml
+kubectl apply -n bidi-mtls-middle -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/bidirection-mtls-access-control/middle.yaml
 
 #模拟外部客户端
 kubectl create namespace bidi-mtls-client
-kubectl apply -n bidi-mtls-client -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/bidirection-mtls-access-control/client.yaml
+kubectl apply -n bidi-mtls-client -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/bidirection-mtls-access-control/client.yaml
 
 #等待依赖的 POD 正常启动
 kubectl wait --for=condition=ready pod -n egress-server -l app=server --timeout=180s
@@ -95,7 +95,7 @@ EOF
 
 ```bash
 #模拟外部客户端
-kubectl apply -n bidi-mtls-client -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/bidirection-mtls-access-control/client-mtls.yaml
+kubectl apply -n bidi-mtls-client -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/bidirection-mtls-access-control/client-mtls.yaml
 
 #等待依赖的 POD 正常启动
 ```
@@ -190,7 +190,7 @@ EOF
 
 ```bash
 #模拟时间服务
-kubectl apply -n egress-server -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/main/demo/bidirection-mtls-access-control/server-mtls.yaml
+kubectl apply -n egress-server -f https://raw.githubusercontent.com/cybwan/osm-edge-start-demo/osm-edge-v1.2.0/demo/bidirection-mtls-access-control/server-mtls.yaml
 
 #等待依赖的 POD 正常启动
 ```
