@@ -243,7 +243,7 @@ kind: EgressGateway
 apiVersion: policy.openservicemesh.io/v1alpha1
 metadata:
   name: global-egress-gateway
-  namespace: egress-gateway
+  namespace: curl
 spec:
   global:
     - service: global-egress-gateway
@@ -361,7 +361,7 @@ kind: EgressGateway
 apiVersion: policy.openservicemesh.io/v1alpha1
 metadata:
   name: global-egress-gateway
-  namespace: egress-gateway
+  namespace: curl
 spec:
   global:
     - service: global-egress-gateway
