@@ -1496,6 +1496,13 @@ connection: keep-alive
 hello: world
 ```
 
+本业务场景测试完毕，清理策略，以避免影响后续测试
+
+```bash
+export osm_namespace=osm-system 
+kubectl patch meshconfig osm-mesh-config -n "$osm_namespace" -p '{"spec":{"traffic":{"enablePermissiveTrafficPolicyMode":true}}}'  --type=merge
+```
+
 ### 5.4 请求头层级限速
 
 #### 5.4.1 每分钟 3 个请求，30%通过率
