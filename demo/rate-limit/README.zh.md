@@ -83,9 +83,9 @@ kubectl wait --for=condition=ready pod -n ratelimit -l app=fortio-client --timeo
 kubectl wait --for=condition=ready pod -n ratelimit -l app=curl --timeout=180s
 ```
 
-### 3.3 场景测试一：4层TCP限速
+## 4 场景测试一：4层TCP限速
 
-#### 3.3.1 无限速设置，100%通过率
+### 4.1 无限速设置，100%通过率
 
 ##### 3.3.1.1 测试指令
 
@@ -133,7 +133,7 @@ tcp OK : 10 (100.0 %)
 All done 10 calls (plus 0 warmup) 4.964 ms avg, 574.8 qps
 ```
 
-#### 3.3.2 每分钟 1 个连接，30%通过率
+### 4.2 每分钟 1 个连接，30%通过率
 
 ##### 3.3.2.1 设置限速策略
 
@@ -232,7 +232,7 @@ osm proxy get stats "$fortio_server" -n ratelimit | grep fortio_8078_tcp.rate_li
 local_rate_limit.inbound_ratelimit/fortio_8078_tcp.rate_limited: 7
 ```
 
-#### 3.3.3 每分钟 1 个连接, 波动峰值为 10，100%通过率
+### 4.3 每分钟 1 个连接, 波动峰值为 10，100%通过率
 
 ##### 3.3.3.1 调整限速策略
 
@@ -318,11 +318,11 @@ local_rate_limit.inbound_ratelimit/fortio_8078_tcp.rate_limited: 10
 kubectl delete upstreamtrafficsettings -n ratelimit tcp-rate-limit
 ```
 
-### 3.4 场景测试二：7层HTTP限速
+## 5 场景测试二：7层HTTP限速
 
-#### 3.4.1 无限速设置，100%通过率
+### 5.1 无限速设置，100%通过率
 
-##### 3.4.1.1 测试指令
+#### 5.1.1 测试指令
 
 ```bash
 fortio_client="$(kubectl get pod -n ratelimit -l app=fortio-client -o jsonpath='{.items[0].metadata.name}')"
@@ -330,7 +330,7 @@ fortio_client="$(kubectl get pod -n ratelimit -l app=fortio-client -o jsonpath='
 kubectl exec "$fortio_client" -n ratelimit -c fortio-client -- fortio load -c 3 -n 10 http://fortio.ratelimit.svc.cluster.local:8080
 ```
 
-##### 3.4.1.2 测试结果
+#### 5.1.2 测试结果
 
 返回结果类似于:
 
@@ -373,11 +373,11 @@ All done 10 calls (plus 0 warmup) 2.728 ms avg, 6.7 qps
 Code 200 : 10 (100.0 %)
 ```
 
-#### 3.4.2 虚拟主机层级限速
+### 5.2 虚拟主机层级限速
 
-##### 3.4.2.1 每分钟 3 个请求，30%通过率
+#### 5.2.1 每分钟 3 个请求，30%通过率
 
-###### 3.4.2.1.1 设置限速策略
+##### 5.2.1.1 设置限速策略
 
 ```bash
 kubectl apply -f - <<EOF
@@ -396,7 +396,7 @@ spec:
 EOF
 ```
 
-###### 3.4.2.1.2 测试指令
+##### 5.2.1.2 测试指令
 
 ```bash
 fortio_client="$(kubectl get pod -n ratelimit -l app=fortio-client -o jsonpath='{.items[0].metadata.name}')"
@@ -404,7 +404,7 @@ fortio_client="$(kubectl get pod -n ratelimit -l app=fortio-client -o jsonpath='
 kubectl exec "$fortio_client" -n ratelimit -c fortio-client -- fortio load -c 3 -n 10 http://fortio.ratelimit.svc.cluster.local:8080
 ```
 
-###### 3.3.2.1.3 测试结果
+##### 5.2.1.3 测试结果
 
 返回结果类似于:
 
@@ -469,7 +469,7 @@ Code 200 : 3 (30.0 %)
 Code 429 : 7 (70.0 %)
 ```
 
-###### 3.3.2.1.4 指标数据
+##### 5.2.1.4 指标数据
 
 ```bash
 fortio_server="$(kubectl get pod -n ratelimit -l app=fortio -o jsonpath='{.items[0].metadata.name}')"
@@ -482,9 +482,9 @@ osm proxy get stats "$fortio_server" -n ratelimit | grep http_local_rate_limiter
 http_local_rate_limiter.http_local_rate_limit.rate_limited: 7
 ```
 
-##### 3.4.2.2 每分钟 3 个请求, 波动峰值为 10，100%通过率
+#### 5.2.2 每分钟 3 个请求, 波动峰值为 10，100%通过率
 
-###### 3.4.2.2.1 调整限速策略
+##### 5.2.2.1 调整限速策略
 
 ```bash
 kubectl apply -f - <<EOF
@@ -504,7 +504,7 @@ spec:
 EOF
 ```
 
-###### 3.4.2.2.2 测试指令
+##### 5.2.2.2 测试指令
 
 ```bash
 fortio_client="$(kubectl get pod -n ratelimit -l app=fortio-client -o jsonpath='{.items[0].metadata.name}')"
@@ -512,7 +512,7 @@ fortio_client="$(kubectl get pod -n ratelimit -l app=fortio-client -o jsonpath='
 kubectl exec "$fortio_client" -n ratelimit -c fortio-client -- fortio load -c 3 -n 10 http://fortio.ratelimit.svc.cluster.local:8080
 ```
 
-###### 3.4.2.2.3 测试结果
+##### 5.2.2.3 测试结果
 
 返回结果类似于:
 
@@ -555,7 +555,7 @@ All done 10 calls (plus 0 warmup) 5.352 ms avg, 6.6 qps
 Code 200 : 10 (100.0 %)
 ```
 
-###### 3.4.2.2.4 指标数据
+##### 5.2.2.4 指标数据
 
 ```bash
 fortio_server="$(kubectl get pod -n ratelimit -l app=fortio -o jsonpath='{.items[0].metadata.name}')"
@@ -568,9 +568,9 @@ osm proxy get stats "$fortio_server" -n ratelimit | grep http_local_rate_limiter
 local_rate_limit.inbound_ratelimit/fortio_8078_tcp.rate_limited: 10
 ```
 
-##### 3.4.2.3 每分钟 3 个请求，30%通过率，回写状态码 509
+#### 5.2.3 每分钟 3 个请求，30%通过率，回写状态码 509
 
-###### 3.4.2.3.1 设置限速策略
+##### 5.2.3.1 设置限速策略
 
 ```bash
 kubectl apply -f - <<EOF
@@ -593,7 +593,7 @@ spec:
 EOF
 ```
 
-###### 3.4.2.1.2 测试指令
+##### 5.2.3.2 测试指令
 
 ```bash
 fortio_client="$(kubectl get pod -n ratelimit -l app=fortio-client -o jsonpath='{.items[0].metadata.name}')"
@@ -601,7 +601,7 @@ fortio_client="$(kubectl get pod -n ratelimit -l app=fortio-client -o jsonpath='
 kubectl exec "$fortio_client" -n ratelimit -c fortio-client -- fortio load -c 3 -n 10 http://fortio.ratelimit.svc.cluster.local:8080
 ```
 
-###### 3.4.2.1.3 测试结果
+##### 5.2.3.3 测试结果
 
 返回结果类似于:
 
@@ -677,7 +677,7 @@ Code 200 : 3 (30.0 %)
 Code 509 : 7 (70.0 %)
 ```
 
-###### 3.4.2.1.4 指标数据
+##### 5.2.3.4 指标数据
 
 ```bash
 fortio_server="$(kubectl get pod -n ratelimit -l app=fortio -o jsonpath='{.items[0].metadata.name}')"
@@ -690,7 +690,7 @@ osm proxy get stats "$fortio_server" -n ratelimit | grep http_local_rate_limiter
 http_local_rate_limiter.http_local_rate_limit.rate_limited: 7
 ```
 
-###### 3.4.2.1.5 测试指令
+##### 5.2.3.5 测试指令
 
 多次执行，触发限流
 
@@ -699,7 +699,7 @@ curl="$(kubectl get pod -n ratelimit -l app=curl -o jsonpath='{.items[0].metadat
 kubectl exec "$curl" -n ratelimit -c curl -- curl -sI http://fortio.ratelimit.svc.cluster.local:8080
 ```
 
-###### 3.4.2.1.6 测试结果
+##### 5.2.3.6 测试结果
 
 返回结果类似于:
 
@@ -716,11 +716,20 @@ connection: keep-alive
 hello: world
 ```
 
-#### 3.4.3 请求路径层级限速
+### 5.3 请求路径层级限速
 
-##### 3.4.3.1 每分钟 3 个请求，30%通过率
+#### 5.3.1 宽松流量模式
 
-###### 3.4.3.1.1 设置限速策略
+##### 5.3.1.1 设置流量宽松模式
+
+```bash
+export osm_namespace=osm-system 
+kubectl patch meshconfig osm-mesh-config -n "$osm_namespace" -p '{"spec":{"traffic":{"enablePermissiveTrafficPolicyMode":true}}}'  --type=merge
+```
+
+##### 5.3.1.2 每分钟 3 个请求，30%通过率
+
+###### 5.3.1.2.1 设置限速策略
 
 ```bash
 kubectl apply -f - <<EOF
@@ -740,7 +749,7 @@ spec:
 EOF
 ```
 
-###### 3.4.3.1.2 测试指令
+###### 5.3.1.2.2 测试指令
 
 ```bash
 fortio_client="$(kubectl get pod -n ratelimit -l app=fortio-client -o jsonpath='{.items[0].metadata.name}')"
@@ -748,7 +757,7 @@ fortio_client="$(kubectl get pod -n ratelimit -l app=fortio-client -o jsonpath='
 kubectl exec "$fortio_client" -n ratelimit -c fortio-client -- fortio load -c 3 -n 10 http://fortio.ratelimit.svc.cluster.local:8080
 ```
 
-###### 3.4.3.1.3 测试结果
+###### 5.3.1.2.3 测试结果
 
 返回结果类似于:
 
@@ -813,7 +822,7 @@ Code 200 : 3 (30.0 %)
 Code 429 : 7 (70.0 %)
 ```
 
-###### 3.4.3.1.4 指标数据
+###### 5.3.1.2.4 指标数据
 
 ```bash
 fortio_server="$(kubectl get pod -n ratelimit -l app=fortio -o jsonpath='{.items[0].metadata.name}')"
@@ -826,9 +835,9 @@ osm proxy get stats "$fortio_server" -n ratelimit | grep http_local_rate_limiter
 http_local_rate_limiter.http_local_rate_limit.rate_limited: 7
 ```
 
-##### 3.4.3.2 每分钟 3 个请求, 波动峰值为 10，100%通过率
+##### 5.3.1.3 每分钟 3 个请求, 波动峰值为 10，100%通过率
 
-###### 3.4.3.2.1 调整限速策略
+###### 5.3.1.3.1 调整限速策略
 
 ```bash
 kubectl apply -f - <<EOF
@@ -849,7 +858,7 @@ spec:
 EOF
 ```
 
-###### 3.4.3.2.2 测试指令
+###### 5.3.1.3.2 测试指令
 
 ```bash
 fortio_client="$(kubectl get pod -n ratelimit -l app=fortio-client -o jsonpath='{.items[0].metadata.name}')"
@@ -857,7 +866,7 @@ fortio_client="$(kubectl get pod -n ratelimit -l app=fortio-client -o jsonpath='
 kubectl exec "$fortio_client" -n ratelimit -c fortio-client -- fortio load -c 3 -n 10 http://fortio.ratelimit.svc.cluster.local:8080
 ```
 
-###### 3.4.3.2.3 测试结果
+###### 5.3.1.3.3 测试结果
 
 返回结果类似于:
 
@@ -900,7 +909,7 @@ All done 10 calls (plus 0 warmup) 5.352 ms avg, 6.6 qps
 Code 200 : 10 (100.0 %)
 ```
 
-###### 3.4.3.2.4 指标数据
+###### 5.3.1.3.4 指标数据
 
 ```bash
 fortio_server="$(kubectl get pod -n ratelimit -l app=fortio -o jsonpath='{.items[0].metadata.name}')"
@@ -913,9 +922,9 @@ osm proxy get stats "$fortio_server" -n ratelimit | grep http_local_rate_limiter
 local_rate_limit.inbound_ratelimit/fortio_8078_tcp.rate_limited: 10
 ```
 
-##### 3.4.3.3 每分钟 3 个请求，30%通过率，回写状态码 509
+##### 5.3.1.4 每分钟 4 个请求，30%通过率，回写状态码 509
 
-###### 3.4.3.3.1 设置限速策略
+###### 5.3.1.4.1 设置限速策略
 
 ```bash
 kubectl apply -f - <<EOF
@@ -939,7 +948,7 @@ spec:
 EOF
 ```
 
-###### 3.4.3.3.2 测试指令
+###### 5.3.1.4.2 测试指令
 
 ```bash
 fortio_client="$(kubectl get pod -n ratelimit -l app=fortio-client -o jsonpath='{.items[0].metadata.name}')"
@@ -947,7 +956,7 @@ fortio_client="$(kubectl get pod -n ratelimit -l app=fortio-client -o jsonpath='
 kubectl exec "$fortio_client" -n ratelimit -c fortio-client -- fortio load -c 3 -n 10 http://fortio.ratelimit.svc.cluster.local:8080
 ```
 
-###### 3.4.3.3.3 测试结果
+###### 5.3.1.4.3 测试结果
 
 返回结果类似于:
 
@@ -1022,7 +1031,7 @@ Code 200 : 3 (30.0 %)
 Code 509 : 7 (70.0 %)
 ```
 
-###### 3.4.3.3.4 指标数据
+###### 5.3.1.4.4 指标数据
 
 ```bash
 fortio_server="$(kubectl get pod -n ratelimit -l app=fortio -o jsonpath='{.items[0].metadata.name}')"
@@ -1035,7 +1044,7 @@ osm proxy get stats "$fortio_server" -n ratelimit | grep http_local_rate_limiter
 http_local_rate_limiter.http_local_rate_limit.rate_limited: 7
 ```
 
-###### 3.4.3.3.5 测试指令
+###### 5.3.1.4.5 测试指令
 
 多次执行，触发限流
 
@@ -1044,7 +1053,7 @@ curl="$(kubectl get pod -n ratelimit -l app=curl -o jsonpath='{.items[0].metadat
 kubectl exec "$curl" -n ratelimit -c curl -- curl -sI http://fortio.ratelimit.svc.cluster.local:8080
 ```
 
-###### 3.4.3.3.6 测试结果
+###### 5.3.1.4.6 测试结果
 
 返回结果类似于:
 
@@ -1061,11 +1070,92 @@ connection: keep-alive
 hello: world
 ```
 
-#### 3.4.4 请求头层级限速
+#### 5.3.2 非宽松流量模式
 
-##### 3.4.4.1 每分钟 3 个请求，30%通过率
+##### 5.3.2.1 设置非流量宽松模式
 
-###### 3.4.4.1.1 设置限速策略
+```bash
+export osm_namespace=osm-system 
+kubectl patch meshconfig osm-mesh-config -n "$osm_namespace" -p '{"spec":{"traffic":{"enablePermissiveTrafficPolicyMode":false}}}'  --type=merge
+```
+
+##### 5.3.2.2 设置流量策略
+
+```bash
+kubectl apply -f - <<EOF
+apiVersion: specs.smi-spec.io/v1alpha4
+kind: HTTPRouteGroup
+metadata:
+  name: fortio-service-routes
+  namespace: ratelimit
+spec:
+  matches:
+  - name: debug
+    pathRegex: /debug
+    methods:
+    - GET
+  - name: fortio
+    pathRegex: /fortio
+    methods:
+    - GET
+EOF
+
+kubectl apply -f - <<EOF
+kind: TrafficTarget
+apiVersion: access.smi-spec.io/v1alpha3
+metadata:
+  name: curl-client-access-service
+  namespace: ratelimit
+spec:
+  destination:
+    kind: ServiceAccount
+    name: server
+    namespace: ratelimit
+  rules:
+  - kind: HTTPRouteGroup
+    name: fortio-service-routes
+    matches:
+    - debug
+    - fortio
+  sources:
+  - kind: ServiceAccount
+    name: curl
+    namespace: ratelimit
+EOF
+
+kubectl apply -f - <<EOF
+kind: TrafficTarget
+apiVersion: access.smi-spec.io/v1alpha3
+metadata:
+  name: fortio-client-access-service
+  namespace: ratelimit
+spec:
+  destination:
+    kind: ServiceAccount
+    name: server
+    namespace: ratelimit
+  rules:
+  - kind: HTTPRouteGroup
+    name: fortio-service-routes
+    matches:
+    - debug
+    - fortio
+  sources:
+  - kind: ServiceAccount
+    name: client
+    namespace: ratelimit
+EOF
+
+curl_client="$(kubectl get pod -n ratelimit -l app=curl -o jsonpath='{.items[0].metadata.name}')"
+kubectl exec "$curl_client" -n ratelimit -c curl -- curl -si http://fortio.ratelimit.svc.cluster.local:8080/debug
+
+curl_client="$(kubectl get pod -n ratelimit -l app=curl -o jsonpath='{.items[0].metadata.name}')"
+kubectl exec "$curl_client" -n ratelimit -c curl -- curl -si http://fortio.ratelimit.svc.cluster.local:8080/fortio
+```
+
+##### 5.3.2.3 每分钟 3 个请求，30%通过率
+
+###### 5.3.2.3.1 设置限速策略
 
 ```bash
 kubectl apply -f - <<EOF
@@ -1076,10 +1166,8 @@ metadata:
   namespace: ratelimit
 spec:
   host: fortio.ratelimit.svc.cluster.local
-  httpHeaders:
-    - headers:
-        - name: hello
-          value: world
+  httpRoutes:
+    - path: /debug
       rateLimit:
         local:
           requests: 3
@@ -1087,15 +1175,15 @@ spec:
 EOF
 ```
 
-###### 3.4.4.1.2 测试指令
+###### 5.3.2.3.2 测试指令
 
 ```bash
 fortio_client="$(kubectl get pod -n ratelimit -l app=fortio-client -o jsonpath='{.items[0].metadata.name}')"
 
-kubectl exec "$fortio_client" -n ratelimit -c fortio-client -- fortio load -c 3 -n 10 -H "hello:world" http://fortio.ratelimit.svc.cluster.local:8080
+kubectl exec "$fortio_client" -n ratelimit -c fortio-client -- fortio load -c 3 -n 10 http://fortio.ratelimit.svc.cluster.local:8080/debug
 ```
 
-###### 3.4.4.1.3 测试结果
+###### 5.3.2.3.3 测试结果
 
 返回结果类似于:
 
@@ -1160,7 +1248,7 @@ Code 200 : 3 (30.0 %)
 Code 429 : 7 (70.0 %)
 ```
 
-###### 3.4.4.1.4 指标数据
+###### 5.3.2.3.4 指标数据
 
 ```bash
 fortio_server="$(kubectl get pod -n ratelimit -l app=fortio -o jsonpath='{.items[0].metadata.name}')"
@@ -1173,9 +1261,9 @@ osm proxy get stats "$fortio_server" -n ratelimit | grep http_local_rate_limiter
 http_local_rate_limiter.http_local_rate_limit.rate_limited: 7
 ```
 
-##### 3.4.4.2 每分钟 3 个请求, 波动峰值为 10，100%通过率
+##### 5.3.2.4 每分钟 3 个请求, 波动峰值为 10，100%通过率
 
-###### 3.4.4.2.1 调整限速策略
+###### 5.3.2.4.1 调整限速策略
 
 ```bash
 kubectl apply -f - <<EOF
@@ -1186,10 +1274,8 @@ metadata:
   namespace: ratelimit
 spec:
   host: fortio.ratelimit.svc.cluster.local
-  httpHeaders:
-    - headers:
-        - name: hello
-          value: world
+  httpRoutes:
+    - path: /debug
       rateLimit:
         local:
           requests: 3
@@ -1198,15 +1284,15 @@ spec:
 EOF
 ```
 
-###### 3.4.4.2.2 测试指令
+###### 5.3.2.4.2 测试指令
 
 ```bash
 fortio_client="$(kubectl get pod -n ratelimit -l app=fortio-client -o jsonpath='{.items[0].metadata.name}')"
 
-kubectl exec "$fortio_client" -n ratelimit -c fortio-client -- fortio load -c 3 -n 10 -H "hello:world" http://fortio.ratelimit.svc.cluster.local:8080
+kubectl exec "$fortio_client" -n ratelimit -c fortio-client -- fortio load -c 3 -n 10 http://fortio.ratelimit.svc.cluster.local:8080/debug
 ```
 
-###### 3.4.4.2.3 测试结果
+###### 5.3.2.4.3 测试结果
 
 返回结果类似于:
 
@@ -1249,7 +1335,7 @@ All done 10 calls (plus 0 warmup) 5.352 ms avg, 6.6 qps
 Code 200 : 10 (100.0 %)
 ```
 
-###### 3.4.4.2.4 指标数据
+###### 5.3.2.4.4 指标数据
 
 ```bash
 fortio_server="$(kubectl get pod -n ratelimit -l app=fortio -o jsonpath='{.items[0].metadata.name}')"
@@ -1262,9 +1348,358 @@ osm proxy get stats "$fortio_server" -n ratelimit | grep http_local_rate_limiter
 local_rate_limit.inbound_ratelimit/fortio_8078_tcp.rate_limited: 10
 ```
 
-##### 3.4.4.3 每分钟 3 个请求，30%通过率，回写状态码 509
+##### 5.3.2.5 每分钟 3 个请求，30%通过率，回写状态码 509
 
-###### 3.4.4.3.1 设置限速策略
+###### 5.3.2.5.1 设置限速策略
+
+```bash
+kubectl apply -f - <<EOF
+apiVersion: policy.openservicemesh.io/v1alpha1
+kind: UpstreamTrafficSetting
+metadata:
+  name: http-rate-limit
+  namespace: ratelimit
+spec:
+  host: fortio.ratelimit.svc.cluster.local
+  httpRoutes:
+    - path: /debug
+      rateLimit:
+        local:
+          requests: 3
+          unit: minute
+          responseStatusCode: 509
+          responseHeadersToAdd:
+            - name: hello
+              value: world
+EOF
+```
+
+###### 5.3.2.5.2 测试指令
+
+```bash
+fortio_client="$(kubectl get pod -n ratelimit -l app=fortio-client -o jsonpath='{.items[0].metadata.name}')"
+
+kubectl exec "$fortio_client" -n ratelimit -c fortio-client -- fortio load -c 3 -n 10 http://fortio.ratelimit.svc.cluster.local:8080/debug
+```
+
+###### 5.3.2.5.3 测试结果
+
+返回结果类似于:
+
+```bash
+10:04:43 I httprunner.go:102> Starting http test for http://fortio.ratelimit.svc.cluster.local:8080 with 3 threads at 8.0 qps and parallel warmup
+Starting at 8 qps with 3 thread(s) [gomax 8] : exactly 10, 3 calls each (total 9 + 1)
+10:04:43 W http_client.go:922> [0] Non ok http code 509 (HTTP/1.1 509)
+10:04:43 W http_client.go:922> [1] Non ok http code 509 (HTTP/1.1 509)
+10:04:43 W http_client.go:922> [2] Non ok http code 509 (HTTP/1.1 509)
+10:04:44 W http_client.go:922> [0] Non ok http code 509 (HTTP/1.1 509)
+10:04:44 W http_client.go:922> [2] Non ok http code 509 (HTTP/1.1 509)
+10:04:44 I periodic.go:809> T002 ended after 1.131536359s : 3 calls. qps=2.651262574232491
+10:04:44 W http_client.go:922> [1] Non ok http code 509 (HTTP/1.1 509)
+10:04:44 I periodic.go:809> T001 ended after 1.131883596s : 3 calls. qps=2.6504492251692637
+10:04:44 W http_client.go:922> [0] Non ok http code 509 (HTTP/1.1 509)
+10:04:44 I periodic.go:809> T000 ended after 1.506504165s : 4 calls. qps=2.655153628466736
+Ended after 1.506533766s : 10 calls. qps=6.6378
+Sleep times : count 7 avg 0.52863491 +/- 0.03069 min 0.489218406 max 0.559163296 sum 3.70044435
+Aggregated Function Time : count 10 avg 0.0063686645 +/- 0.003339 min 0.002259049 max 0.011597923 sum 0.063686645
+# range, mid point, percentile, count
+>= 0.00225905 <= 0.003 , 0.00262952 , 20.00, 2
+> 0.003 <= 0.004 , 0.0035 , 30.00, 1
+> 0.004 <= 0.005 , 0.0045 , 40.00, 1
+> 0.005 <= 0.006 , 0.0055 , 60.00, 2
+> 0.006 <= 0.007 , 0.0065 , 70.00, 1
+> 0.01 <= 0.011 , 0.0105 , 90.00, 2
+> 0.011 <= 0.0115979 , 0.011299 , 100.00, 1
+# target 50% 0.0055
+# target 75% 0.01025
+# target 90% 0.011
+# target 99% 0.0115381
+# target 99.9% 0.0115919
+Error cases : count 7 avg 0.004355754 +/- 0.001534 min 0.002259049 max 0.006051199 sum 0.030490278
+# range, mid point, percentile, count
+>= 0.00225905 <= 0.003 , 0.00262952 , 28.57, 2
+> 0.003 <= 0.004 , 0.0035 , 42.86, 1
+> 0.004 <= 0.005 , 0.0045 , 57.14, 1
+> 0.005 <= 0.006 , 0.0055 , 85.71, 2
+> 0.006 <= 0.0060512 , 0.0060256 , 100.00, 1
+# target 50% 0.0045
+# target 75% 0.005625
+# target 90% 0.00601536
+# target 99% 0.00604762
+# target 99.9% 0.00605084
+# Socket and IP used for each connection:
+[0]   3 socket used, resolved to [10.96.137.219:8080] connection timing : count 3 avg 0.00024358433 +/- 6.69e-05 min 0.000172271 max 0.000333078 sum 0.000730753
+[1]   2 socket used, resolved to [10.96.137.219:8080] connection timing : count 2 avg 0.0001659035 +/- 2.797e-05 min 0.000137933 max 0.000193874 sum 0.000331807
+[2]   2 socket used, resolved to [10.96.137.219:8080] connection timing : count 2 avg 0.000200063 +/- 7.513e-05 min 0.000124936 max 0.00027519 sum 0.000400126
+Connection time histogram (s) : count 7 avg 0.00020895514 +/- 6.943e-05 min 0.000124936 max 0.000333078 sum 0.001462686
+# range, mid point, percentile, count
+>= 0.000124936 <= 0.000333078 , 0.000229007 , 100.00, 7
+# target 50% 0.000211662
+# target 75% 0.00027237
+# target 90% 0.000308795
+# target 99% 0.00033065
+# target 99.9% 0.000332835
+Sockets used: 7 (for perfect keepalive, would be 3)
+Uniform: false, Jitter: false
+IP addresses distribution:
+10.96.137.219:8080: 7
+Code 200 : 3 (30.0 %)
+Code 509 : 7 (70.0 %)
+Response Header Sizes : count 10 avg 29.7 +/- 45.37 min 0 max 99 sum 297
+Response Body/Total Sizes : count 10 avg 101.1 +/- 1.375 min 99 max 102 sum 1011
+All done 10 calls (plus 0 warmup) 6.369 ms avg, 6.6 qps
+```
+
+正如上面的测试结果所示，30%的请求成功执行
+
+```bash
+Code 200 : 3 (30.0 %)
+Code 509 : 7 (70.0 %)
+```
+
+###### 5.3.2.5.4 指标数据
+
+```bash
+fortio_server="$(kubectl get pod -n ratelimit -l app=fortio -o jsonpath='{.items[0].metadata.name}')"
+osm proxy get stats "$fortio_server" -n ratelimit | grep http_local_rate_limiter.http_local_rate_limit
+```
+
+查询结果:
+
+```bash
+http_local_rate_limiter.http_local_rate_limit.rate_limited: 7
+```
+
+###### 5.3.2.5.5 测试指令
+
+多次执行，触发限流
+
+```bash
+curl="$(kubectl get pod -n ratelimit -l app=curl -o jsonpath='{.items[0].metadata.name}')"
+kubectl exec "$curl" -n ratelimit -c curl -- curl -si http://fortio.ratelimit.svc.cluster.local:8080/debug
+```
+
+###### 5.3.2.5.6 测试结果
+
+返回结果类似于:
+
+```bash
+HTTP/1.1 509 Unassigned
+hello: world
+content-length: 17
+connection: keep-alive
+```
+
+返回响应头:
+
+```bash
+hello: world
+```
+
+### 5.4 请求头层级限速
+
+#### 5.4.1 每分钟 3 个请求，30%通过率
+
+##### 5.4.1.1 设置限速策略
+
+```bash
+kubectl apply -f - <<EOF
+apiVersion: policy.openservicemesh.io/v1alpha1
+kind: UpstreamTrafficSetting
+metadata:
+  name: http-rate-limit
+  namespace: ratelimit
+spec:
+  host: fortio.ratelimit.svc.cluster.local
+  httpHeaders:
+    - headers:
+        - name: hello
+          value: world
+      rateLimit:
+        local:
+          requests: 3
+          unit: minute
+EOF
+```
+
+##### 5.4.1.2 测试指令
+
+```bash
+fortio_client="$(kubectl get pod -n ratelimit -l app=fortio-client -o jsonpath='{.items[0].metadata.name}')"
+
+kubectl exec "$fortio_client" -n ratelimit -c fortio-client -- fortio load -c 3 -n 10 -H "hello:world" http://fortio.ratelimit.svc.cluster.local:8080
+```
+
+##### 5.4.1.3 测试结果
+
+返回结果类似于:
+
+```bash
+Fortio 1.34.1 running at 8 queries per second, 8->8 procs, for 10 calls: http://fortio.ratelimit.svc.cluster.local:8080
+10:30:21 I httprunner.go:98> Starting http test for http://fortio.ratelimit.svc.cluster.local:8080 with 3 threads at 8.0 qps and parallel warmup
+Starting at 8 qps with 3 thread(s) [gomax 8] : exactly 10, 3 calls each (total 9 + 1)
+10:30:22 W http_client.go:889> [0] Non ok http code 429 (HTTP/1.1 429)
+10:30:22 W http_client.go:889> [2] Non ok http code 429 (HTTP/1.1 429)
+10:30:22 W http_client.go:889> [1] Non ok http code 429 (HTTP/1.1 429)
+10:30:22 W http_client.go:889> [0] Non ok http code 429 (HTTP/1.1 429)
+10:30:22 W http_client.go:889> [1] Non ok http code 429 (HTTP/1.1 429)
+10:30:22 I periodic.go:721> T001 ended after 1.129974506s : 3 calls. qps=2.654927154613168
+10:30:22 W http_client.go:889> [2] Non ok http code 429 (HTTP/1.1 429)
+10:30:22 I periodic.go:721> T002 ended after 1.131041289s : 3 calls. qps=2.652423062868397
+10:30:23 W http_client.go:889> [0] Non ok http code 429 (HTTP/1.1 429)
+10:30:23 I periodic.go:721> T000 ended after 1.503440771s : 4 calls. qps=2.660563739627359
+Ended after 1.503678339s : 10 calls. qps=6.6504
+Sleep times : count 7 avg 0.52937663 +/- 0.03061 min 0.488825155 max 0.560046385 sum 3.70563638
+Aggregated Function Time : count 10 avg 0.0052598876 +/- 0.003915 min 0.00164245 max 0.011292554 sum 0.052598876
+# range, mid point, percentile, count
+>= 0.00164245 <= 0.002 , 0.00182123 , 20.00, 2
+> 0.002 <= 0.003 , 0.0025 , 50.00, 3
+> 0.003 <= 0.004 , 0.0035 , 60.00, 1
+> 0.004 <= 0.005 , 0.0045 , 70.00, 1
+> 0.01 <= 0.011 , 0.0105 , 80.00, 1
+> 0.011 <= 0.0112926 , 0.0111463 , 100.00, 2
+# target 50% 0.003
+# target 75% 0.0105
+# target 90% 0.0111463
+# target 99% 0.0112779
+# target 99.9% 0.0112911
+Error cases : count 7 avg 0.0027715733 +/- 0.001114 min 0.00164245 max 0.004884773 sum 0.019401013
+# range, mid point, percentile, count
+>= 0.00164245 <= 0.002 , 0.00182123 , 28.57, 2
+> 0.002 <= 0.003 , 0.0025 , 71.43, 3
+> 0.003 <= 0.004 , 0.0035 , 85.71, 1
+> 0.004 <= 0.00488477 , 0.00444239 , 100.00, 1
+# target 50% 0.0025
+# target 75% 0.00325
+# target 90% 0.00426543
+# target 99% 0.00482284
+# target 99.9% 0.00487858
+10:30:23 I httprunner.go:197> [0]   3 socket used, resolved to 10.96.56.21:8080
+10:30:23 I httprunner.go:197> [1]   2 socket used, resolved to 10.96.56.21:8080
+10:30:23 I httprunner.go:197> [2]   2 socket used, resolved to 10.96.56.21:8080
+Sockets used: 7 (for perfect keepalive, would be 3)
+Uniform: false, Jitter: false
+IP addresses distribution:
+10.96.56.21:8080: 3
+Code 200 : 3 (30.0 %)
+Code 429 : 7 (70.0 %)
+Response Header Sizes : count 10 avg 29.7 +/- 45.37 min 0 max 99 sum 297
+Response Body/Total Sizes : count 10 avg 86.4 +/- 8.249 min 81 max 99 sum 864
+All done 10 calls (plus 0 warmup) 5.260 ms avg, 6.7 qps
+```
+
+正如上面的测试结果所示，30%的请求成功执行
+
+```bash
+Code 200 : 3 (30.0 %)
+Code 429 : 7 (70.0 %)
+```
+
+##### 5.4.1.4 指标数据
+
+```bash
+fortio_server="$(kubectl get pod -n ratelimit -l app=fortio -o jsonpath='{.items[0].metadata.name}')"
+osm proxy get stats "$fortio_server" -n ratelimit | grep http_local_rate_limiter.http_local_rate_limit
+```
+
+查询结果:
+
+```bash
+http_local_rate_limiter.http_local_rate_limit.rate_limited: 7
+```
+
+#### 5.4.2 每分钟 3 个请求, 波动峰值为 10，100%通过率
+
+##### 5.4.2.1 调整限速策略
+
+```bash
+kubectl apply -f - <<EOF
+apiVersion: policy.openservicemesh.io/v1alpha1
+kind: UpstreamTrafficSetting
+metadata:
+  name: http-rate-limit
+  namespace: ratelimit
+spec:
+  host: fortio.ratelimit.svc.cluster.local
+  httpHeaders:
+    - headers:
+        - name: hello
+          value: world
+      rateLimit:
+        local:
+          requests: 3
+          unit: minute
+          burst: 10
+EOF
+```
+
+##### 5.4.2.2 测试指令
+
+```bash
+fortio_client="$(kubectl get pod -n ratelimit -l app=fortio-client -o jsonpath='{.items[0].metadata.name}')"
+
+kubectl exec "$fortio_client" -n ratelimit -c fortio-client -- fortio load -c 3 -n 10 -H "hello:world" http://fortio.ratelimit.svc.cluster.local:8080
+```
+
+##### 5.4.2.3 测试结果
+
+返回结果类似于:
+
+```bash
+Fortio 1.34.1 running at 8 queries per second, 8->8 procs, for 10 calls: http://fortio.ratelimit.svc.cluster.local:8080
+01:15:26 I httprunner.go:98> Starting http test for http://fortio.ratelimit.svc.cluster.local:8080 with 3 threads at 8.0 qps and parallel warmup
+Starting at 8 qps with 3 thread(s) [gomax 8] : exactly 10, 3 calls each (total 9 + 1)
+01:15:27 I periodic.go:721> T001 ended after 1.128083378s : 3 calls. qps=2.6593778957356466
+01:15:27 I periodic.go:721> T002 ended after 1.128407363s : 3 calls. qps=2.65861434298351
+01:15:28 I periodic.go:721> T000 ended after 1.504108753s : 4 calls. qps=2.6593821703529437
+Ended after 1.504282705s : 10 calls. qps=6.6477
+Sleep times : count 7 avg 0.52865926 +/- 0.03053 min 0.488882417 max 0.55887838 sum 3.70061482
+Aggregated Function Time : count 10 avg 0.0053517901 +/- 0.003907 min 0.00200691 max 0.011444314 sum 0.053517901
+# range, mid point, percentile, count
+>= 0.00200691 <= 0.003 , 0.00250345 , 30.00, 3
+> 0.003 <= 0.004 , 0.0035 , 70.00, 4
+> 0.011 <= 0.0114443 , 0.0112222 , 100.00, 3
+# target 50% 0.0035
+# target 75% 0.0110741
+# target 90% 0.0112962
+# target 99% 0.0114295
+# target 99.9% 0.0114428
+Error cases : no data
+01:15:28 I httprunner.go:197> [0]   1 socket used, resolved to 10.96.249.207:8080
+01:15:28 I httprunner.go:197> [1]   1 socket used, resolved to 10.96.249.207:8080
+01:15:28 I httprunner.go:197> [2]   1 socket used, resolved to 10.96.249.207:8080
+Sockets used: 3 (for perfect keepalive, would be 3)
+Uniform: false, Jitter: false
+IP addresses distribution:
+10.96.249.207:8080: 3
+Code 200 : 10 (100.0 %)
+Response Header Sizes : count 10 avg 99 +/- 0 min 99 max 99 sum 990
+Response Body/Total Sizes : count 10 avg 99 +/- 0 min 99 max 99 sum 990
+All done 10 calls (plus 0 warmup) 5.352 ms avg, 6.6 qps
+```
+
+正如上面的测试结果所示，所有的请求都成功执行
+
+```bash
+Code 200 : 10 (100.0 %)
+```
+
+##### 5.4.2.4 指标数据
+
+```bash
+fortio_server="$(kubectl get pod -n ratelimit -l app=fortio -o jsonpath='{.items[0].metadata.name}')"
+osm proxy get stats "$fortio_server" -n ratelimit | grep http_local_rate_limiter.http_local_rate_limit
+```
+
+查询结果:
+
+```bash
+local_rate_limit.inbound_ratelimit/fortio_8078_tcp.rate_limited: 10
+```
+
+#### 5.4.3 每分钟 3 个请求，30%通过率，回写状态码 509
+
+##### 5.4.3.1 设置限速策略
 
 ```bash
 kubectl apply -f - <<EOF
@@ -1290,7 +1725,7 @@ spec:
 EOF
 ```
 
-###### 3.4.4.3.2 测试指令
+##### 5.4.3.2 测试指令
 
 ```bash
 fortio_client="$(kubectl get pod -n ratelimit -l app=fortio-client -o jsonpath='{.items[0].metadata.name}')"
@@ -1298,7 +1733,7 @@ fortio_client="$(kubectl get pod -n ratelimit -l app=fortio-client -o jsonpath='
 kubectl exec "$fortio_client" -n ratelimit -c fortio-client -- fortio load -c 3 -n 10 -H "hello:world" http://fortio.ratelimit.svc.cluster.local:8080
 ```
 
-###### 3.4.4.3.3 测试结果
+##### 5.4.3.3 测试结果
 
 返回结果类似于:
 
@@ -1374,7 +1809,7 @@ Code 200 : 3 (30.0 %)
 Code 509 : 7 (70.0 %)
 ```
 
-###### 3.4.4.3.4 指标数据
+##### 5.4.3.4 指标数据
 
 ```bash
 fortio_server="$(kubectl get pod -n ratelimit -l app=fortio -o jsonpath='{.items[0].metadata.name}')"
@@ -1387,7 +1822,7 @@ osm proxy get stats "$fortio_server" -n ratelimit | grep http_local_rate_limiter
 http_local_rate_limiter.http_local_rate_limit.rate_limited: 7
 ```
 
-###### 3.4.4.3.5 测试指令
+##### 5.4.3.5 测试指令
 
 多次执行，触发限流
 
@@ -1396,7 +1831,7 @@ curl="$(kubectl get pod -n ratelimit -l app=curl -o jsonpath='{.items[0].metadat
 kubectl exec "$curl" -n ratelimit -c curl -- curl -sI -H "hello:world" http://fortio.ratelimit.svc.cluster.local:8080
 ```
 
-###### 3.4.4.3.6 测试结果
+##### 5.4.3.6 测试结果
 
 返回结果类似于:
 
