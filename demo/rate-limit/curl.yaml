@@ -22,7 +22,7 @@ spec:
         kubernetes.io/arch: amd64
         kubernetes.io/os: linux
       containers:
-      - image: curlimages/curl
-        imagePullPolicy: IfNotPresent
-        name: curl
-        command: ["sleep", "365d"]
+        - image: curlimages/curl
+          imagePullPolicy: IfNotPresent
+          name: curl
+          command: ["sleep", "365d"]

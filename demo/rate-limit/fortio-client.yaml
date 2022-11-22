@@ -1,3 +1,8 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: client
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -12,7 +17,8 @@ spec:
       labels:
         app: fortio-client
     spec:
+      serviceAccountName: client
       containers:
-      - name: fortio-client
-        image: fortio/fortio:latest_release
-        imagePullPolicy: Always
+        - name: fortio-client
+          image: fortio/fortio:latest_release
+          imagePullPolicy: Always
